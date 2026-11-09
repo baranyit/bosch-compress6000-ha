@@ -1,6 +1,6 @@
 [project]
 name = "bosch-compress6000-ha"
-version = "0.1.0"
+version = "0.1.1"
 description = "Bosch Compress 6000 heat pump Home Assistant integration (local KM200 gateway)"
 readme = "README.md"
 license = "MIT"

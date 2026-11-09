@@ -1,6 +1,6 @@
 # Bosch Compress 6000 for Home Assistant
 
-Status: beta (0.1.0, unreleased).
+Status: beta (0.1.1, unreleased).
 
 A custom integration for a Bosch Compress 6000 heat pump behind a Bosch/Buderus KM200-family
 gateway. Local only (encrypted HTTP), no cloud, no MQTT, no HomeGate. It replaces the Bosch part of

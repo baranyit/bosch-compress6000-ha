@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 (unreleased, beta)
+
+Patch: hassfest rejects requirements that Home Assistant itself provides; `cryptography` and
+`aiohttp` are removed from the manifest (no behaviour change).
+
 ## 0.1.0 (unreleased, beta)
 
 First version: replaces the Bosch part of the retired HomeGate MQTT bridge.
