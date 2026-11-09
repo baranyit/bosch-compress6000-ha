@@ -1,0 +1,144 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Csatlakozás a Bosch gatewayhez",
+        "description": "Add meg a Bosch/Buderus KM200 gateway címét, a matricán lévő gateway jelszót és a gyártói appban beállított privát jelszót. Csak olvasó kérések mennek.",
+        "data": {
+          "name": "Név",
+          "host": "Gazda",
+          "gateway_password": "Gateway jelszó",
+          "private_password": "Privát jelszó"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Jelszavak frissítése",
+        "description": "A gateway nem fogadta el a tárolt jelszavakat.",
+        "data": {
+          "gateway_password": "Gateway jelszó",
+          "private_password": "Privát jelszó"
+        }
+      },
+      "reconfigure": {
+        "title": "A gateway címének módosítása",
+        "data": {
+          "host": "Gazda"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "A gateway nem érhető el.",
+      "invalid_auth": "A gateway vagy a privát jelszó hibás.",
+      "unknown": "Váratlan hiba."
+    },
+    "abort": {
+      "already_configured": "Ez a gateway már be van állítva.",
+      "reauth_successful": "A jelszavak frissítve.",
+      "reconfigure_successful": "Az újrakonfigurálás sikeres."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Lekérdezés és távvezérlés",
+        "description": "Az írás alapból kikapcsolt. Bekapcsolva csak a kiválasztott csoportok változtathatók, csak kérésre (kapcsoló, szám, választó), egyszer, rövid késleltetéssel, és az új értéket visszaolvassuk. Egyébként semmi nem íródik.",
+        "data": {
+          "poll_interval": "Lekérdezési időköz (mp)",
+          "claim_legacy_entities": "A régi MQTT (HomeGate) entitások átvétele",
+          "write_enabled": "Írás engedélyezése (alapból ki)",
+          "write_groups": "Módosítható csoportok"
+        }
+      }
+    },
+    "error": {
+      "no_group_selected": "Válassz legalább egy csoportot, vagy kapcsold ki az írást."
+    }
+  },
+  "selector": {
+    "write_groups": {
+      "options": {
+        "extra_hot_water": "Extra melegvíz (egy töltés indítása/leállítása)",
+        "hot_water": "Melegvíz üzemmód és hőmérséklet",
+        "heating": "Fűtés üzemmód és kézi szobahőmérséklet"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "outdoor_temperature": {
+        "name": "Outdoor Temperature"
+      },
+      "supply_temperature": {
+        "name": "Előremenő hőmérséklet"
+      },
+      "return_temperature": {
+        "name": "Visszatérő hőmérséklet"
+      },
+      "room_temperature": {
+        "name": "Szobahőmérséklet"
+      },
+      "room_setpoint": {
+        "name": "Szoba alapjel"
+      },
+      "dhw_temperature": {
+        "name": "Melegvíz hőmérséklet"
+      },
+      "dhw_setpoint": {
+        "name": "Melegvíz alapjel"
+      },
+      "modulation": {
+        "name": "Moduláció"
+      },
+      "pump_modulation": {
+        "name": "Fűtőkör szivattyú moduláció"
+      },
+      "number_of_starts": {
+        "name": "Kompresszor indítások"
+      },
+      "system_pressure": {
+        "name": "Rendszernyomás"
+      },
+      "power_setpoint": {
+        "name": "Teljesítmény alapjel"
+      },
+      "total_energy": {
+        "name": "Összes fogyasztott energia"
+      },
+      "compressor_energy": {
+        "name": "Kompresszor fogyasztott energia"
+      },
+      "eheater_energy": {
+        "name": "Elektromos fűtőbetét fogyasztott energia"
+      },
+      "heat_output_energy": {
+        "name": "Leadott hőenergia"
+      }
+    },
+    "switch": {
+      "dhw_charge": {
+        "name": "Extra melegvíz"
+      }
+    },
+    "number": {
+      "dhw_temperature_high": {
+        "name": "Melegvíz célhőmérséklet"
+      },
+      "heating_manual_setpoint": {
+        "name": "Kézi szoba alapjel"
+      }
+    },
+    "select": {
+      "dhw_operation_mode": {
+        "name": "Melegvíz üzemmód"
+      },
+      "heating_operation_mode": {
+        "name": "Fűtés üzemmód"
+      }
+    }
+  },
+  "exceptions": {
+    "command_rejected": {
+      "message": "A parancs nem lett elküldve: {reason}"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+[project]
+name = "bosch-compress6000-ha"
+version = "0.1.0"
+description = "Bosch Compress 6000 heat pump Home Assistant integration (local KM200 gateway)"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.13"
+dependencies = ["cryptography>=43.0.0", "aiohttp>=3.10.0"]
+
+[project.optional-dependencies]
+test = ["pytest-homeassistant-custom-component>=0.13.316"]
+dev = ["pytest-homeassistant-custom-component>=0.13.316", "ruff", "mypy"]
+
+[tool.setuptools]
+packages = ["custom_components.bosch_compress6000"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+asyncio_mode = "auto"
+markers = [
+  "hardware: opt-in read-only validation against a real gateway (never in CI)",
+  "hardware_write: opt-in hardware WRITE test, needs explicit maintainer approval (never in CI)",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF", "ASYNC", "BLE"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+files = ["custom_components"]
+
+[[tool.mypy.overrides]]
+module = ["cryptography", "cryptography.*"]
+ignore_missing_imports = true

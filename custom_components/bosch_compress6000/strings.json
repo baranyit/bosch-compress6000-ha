@@ -1,0 +1,144 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to the Bosch gateway",
+        "description": "Enter the address of the Bosch/Buderus KM200 gateway, the gateway password from its sticker and the private password set in the vendor app. Only read requests are sent.",
+        "data": {
+          "name": "Name",
+          "host": "Host",
+          "gateway_password": "Gateway password",
+          "private_password": "Private password"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Update the passwords",
+        "description": "The gateway did not accept the stored passwords.",
+        "data": {
+          "gateway_password": "Gateway password",
+          "private_password": "Private password"
+        }
+      },
+      "reconfigure": {
+        "title": "Change the gateway address",
+        "data": {
+          "host": "Host"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot reach the gateway.",
+      "invalid_auth": "The gateway or private password is wrong.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This gateway is already configured.",
+      "reauth_successful": "Passwords updated.",
+      "reconfigure_successful": "Reconfiguration successful."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Polling and remote control",
+        "description": "Writing is off by default. When enabled, only the selected groups can change, only after you ask (a switch, number or select), once, after a short delay, and the new value is read back. Nothing is written otherwise.",
+        "data": {
+          "poll_interval": "Poll interval (s)",
+          "claim_legacy_entities": "Take over the old MQTT (HomeGate) entities",
+          "write_enabled": "Enable writing (off by default)",
+          "write_groups": "Groups allowed to change"
+        }
+      }
+    },
+    "error": {
+      "no_group_selected": "Select at least one group, or turn writing off."
+    }
+  },
+  "selector": {
+    "write_groups": {
+      "options": {
+        "extra_hot_water": "Extra hot water (start/stop one charge)",
+        "hot_water": "Hot water mode and temperature",
+        "heating": "Heating mode and manual room setpoint"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "outdoor_temperature": {
+        "name": "Outdoor Temperature"
+      },
+      "supply_temperature": {
+        "name": "Supply temperature"
+      },
+      "return_temperature": {
+        "name": "Return temperature"
+      },
+      "room_temperature": {
+        "name": "Room temperature"
+      },
+      "room_setpoint": {
+        "name": "Room setpoint"
+      },
+      "dhw_temperature": {
+        "name": "Hot water temperature"
+      },
+      "dhw_setpoint": {
+        "name": "Hot water setpoint"
+      },
+      "modulation": {
+        "name": "Modulation"
+      },
+      "pump_modulation": {
+        "name": "Heating pump modulation"
+      },
+      "number_of_starts": {
+        "name": "Compressor starts"
+      },
+      "system_pressure": {
+        "name": "System pressure"
+      },
+      "power_setpoint": {
+        "name": "Power setpoint"
+      },
+      "total_energy": {
+        "name": "Total consumed energy"
+      },
+      "compressor_energy": {
+        "name": "Compressor consumed energy"
+      },
+      "eheater_energy": {
+        "name": "Electric heater consumed energy"
+      },
+      "heat_output_energy": {
+        "name": "Heat output energy"
+      }
+    },
+    "switch": {
+      "dhw_charge": {
+        "name": "Extra hot water"
+      }
+    },
+    "number": {
+      "dhw_temperature_high": {
+        "name": "Hot water target temperature"
+      },
+      "heating_manual_setpoint": {
+        "name": "Manual room setpoint"
+      }
+    },
+    "select": {
+      "dhw_operation_mode": {
+        "name": "Hot water mode"
+      },
+      "heating_operation_mode": {
+        "name": "Heating mode"
+      }
+    }
+  },
+  "exceptions": {
+    "command_rejected": {
+      "message": "The command was not sent: {reason}"
+    }
+  }
+}

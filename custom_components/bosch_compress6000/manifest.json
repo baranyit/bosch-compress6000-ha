@@ -1,0 +1,12 @@
+{
+  "domain": "bosch_compress6000",
+  "name": "Bosch Compress 6000",
+  "codeowners": ["@baranyit"],
+  "config_flow": true,
+  "documentation": "https://github.com/baranyit/bosch-compress6000-ha",
+  "integration_type": "hub",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/baranyit/bosch-compress6000-ha/issues",
+  "requirements": ["cryptography>=43.0.0"],
+  "version": "0.1.0"
+}
