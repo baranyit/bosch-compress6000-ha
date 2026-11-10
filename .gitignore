@@ -12,3 +12,4 @@ htmlcov/
 tests/hardware/reports/
 *.secret
 secrets.yaml
+.DS_Store

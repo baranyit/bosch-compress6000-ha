@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.2 (unreleased, beta)
+
+Patch: documentation moved into the code and AGENTS.md (the `docs/` folder is gone), official logo,
+the options text no longer names a specific bridge, and hassfest and HACS validation run as their own
+workflows (README status badges, weekly schedule). No behaviour change.
+
 ## 0.1.1 (unreleased, beta)
 
 Patch: hassfest rejects requirements that Home Assistant itself provides; `cryptography` and
@@ -7,7 +13,7 @@ Patch: hassfest rejects requirements that Home Assistant itself provides; `crypt
 
 ## 0.1.0 (unreleased, beta)
 
-First version: replaces the Bosch part of the retired HomeGate MQTT bridge.
+First version: local replacement for an MQTT-based Bosch heat pump setup.
 
 - Local KM200 gateway polling (encrypted HTTP, no cloud, no MQTT); serialized, spaced requests.
 - Entities with unchanged IDs: `sensor.bosch_total_consumed_energy_kwh`,

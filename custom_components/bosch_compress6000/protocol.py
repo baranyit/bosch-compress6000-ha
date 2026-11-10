@@ -1,9 +1,29 @@
 """Pure protocol layer: the point catalog and the codecs. No I/O, no Home Assistant.
 
-Confidence of the catalog (see ``docs/02-protocol-specification.md``): the paths marked ``homegate``
-were read by the retired HomeGate bridge on the real installation. The others are standard KM200
-resources that this gateway family exposes; they are probed at setup and skipped when the gateway
-answers 404.
+Wire format: ``GET http://<host>/<path>`` with ``User-Agent: TeleHeater``; the body is base64 of an
+AES-256-ECB ciphertext (see ``crypto.py``) holding JSON ``{type, value, unitOfMeasure, writeable,
+allowedValues, minValue, maxValue}``. A reply without ``value`` is a directory, not a point. A write
+is the same encrypted form of ``{"value": ...}`` POSTed to the path. Recordings:
+``recordings/<path>?interval=YYYY-MM-DD`` returns 24 hourly ``{y, c}`` samples; the hour value is
+``round(y / c, 2)`` and ``c == 0`` means no sample.
+
+Confidence of the catalog: ``OBSERVED`` points were read on the real installation. ``STANDARD``
+points are standard KM200 resources, probed at setup and skipped when the gateway answers 404.
+Observed on the real gateway (Compress 6000, 2026-11-09):
+
+- Absent (404): ``system_pressure``, ``heating_manual_setpoint`` (no entities are created).
+- ``dhw_charge`` allows ``stop``/``start``; ``dhw_operation_mode`` allows ``Off``, ``low``,
+  ``high``, ``ownprogram``, ``eco`` (mixed case, used verbatim); ``heating_operation_mode`` allows
+  ``auto``, ``manual``; ``dhw_temperature_high`` is limited to 30..43 C.
+- ``writeable`` is true exactly for the points with a write group. Units are ``C``, ``%`` and a
+  blank unit for the start counter.
+- Energy recordings answer for all four points; heat output / compressor is about 4.5, consistent
+  with kWh (the unit is not documented by the vendor). A real zero hour has samples (``c > 0``).
+- One ``dhw_charge`` start, observed for 15 s, then stop, was accepted and read back. The physical
+  effect and the run time of a start are unverified, as are writes to the other four points.
+
+Not catalogued on purpose: the lifetime ``heatSources/energyMonitoring/consumption`` (unit
+unverified), cooling, solar, pool, smart grid, time programs, a second heating or hot water circuit.
 """
 
 from __future__ import annotations
@@ -29,7 +49,7 @@ class WriteGroup(StrEnum):
 
 
 class Confidence(StrEnum):
-    HOMEGATE = "homegate"  # read on the real installation by the retired bridge
+    OBSERVED = "observed"  # read on the real installation
     STANDARD = "standard"  # standard KM200 resource, probed at setup
 
 
@@ -52,7 +72,7 @@ class EnergyPoint:
     confidence: Confidence
 
 
-H = Confidence.HOMEGATE
+H = Confidence.OBSERVED
 S = Confidence.STANDARD
 
 DHW = "dhwCircuits/dhw1/"

@@ -24,15 +24,15 @@ REQUEST_SPACING = 0.5
 REQUEST_TIMEOUT = 10.0
 USER_AGENT = "TeleHeater"
 
-# Energy recordings are hourly. The previous hour is read this long after it ended (HomeGate
-# read at minute 5), then once per hour.
+# Energy recordings are hourly. The previous hour is read this long after it ended, then once
+# per hour.
 ENERGY_GRACE_MINUTES = 5
 
 # Explicit user commands are debounced, then written once (latest value wins per point).
 COMMAND_DEBOUNCE = 1.5
 
-# unique_id of the entities the retired HomeGate MQTT bridge provided. They are kept so the
-# history and the Energy dashboard continue; the integration claims the old registry entries.
+# unique_id of the four entities an earlier MQTT-based setup provided. They are kept so history and
+# the Energy dashboard continue; the integration claims the old MQTT entries (see migration.py).
 LEGACY_MQTT_UNIQUE_IDS: dict[str, str] = {
     "total_energy": "bosch_energymonitoring_total",
     "compressor_energy": "bosch_energymonitoring_compressor",

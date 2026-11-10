@@ -44,7 +44,7 @@
         "description": "Writing is off by default. When enabled, only the selected groups can change, only after you ask (a switch, number or select), once, after a short delay, and the new value is read back. Nothing is written otherwise.",
         "data": {
           "poll_interval": "Poll interval (s)",
-          "claim_legacy_entities": "Take over the old MQTT (HomeGate) entities",
+          "claim_legacy_entities": "Take over the old MQTT entities",
           "write_enabled": "Enable writing (off by default)",
           "write_groups": "Groups allowed to change"
         }

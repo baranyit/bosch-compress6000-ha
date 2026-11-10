@@ -1,9 +1,20 @@
-"""Claim the entities of the retired HomeGate MQTT bridge, so history and Energy continue.
+"""Claim the entities of an earlier MQTT-based setup, so history and Energy continue.
 
-The entity registry maps (platform, unique_id) to an entity_id. The MQTT entries carry the same
-unique IDs this integration uses, so they are re-pointed to this integration through the registry
-API (never by editing ``.storage``). Their entity IDs, names and statistics stay. Run it after the
-MQTT YAML definitions are gone; a definition that is still active simply loses its duplicate.
+Entity IDs, unique IDs and the device are fixed for these four sensors::
+
+    sensor.bosch_total_consumed_energy_kwh       bosch_energymonitoring_total
+    sensor.bosch_compressor_consumed_energy_kwh  bosch_energymonitoring_compressor
+    sensor.bosch_eheater_consumed_energy_kwh     bosch_energymonitoring_eheater
+    sensor.heatpump_outdoor_temperature          bosch_outdoor_temperature
+
+The entity registry maps (platform, unique_id) to an entity_id. The old MQTT entries carry the same
+unique IDs this integration uses, so a plain new integration would get ``_2`` IDs and split the
+statistics. They are re-pointed to this integration through the registry API (never by editing
+``.storage``), keeping entity ID, name and statistics, and moved to the new device.
+
+Cut-over order: remove the MQTT YAML definitions first (otherwise MQTT and this integration both
+claim the unique IDs; the YAML entity then loses its duplicate), then add the integration. Hours
+between the old setup stopping and the first read here are not back-filled.
 """
 
 from __future__ import annotations

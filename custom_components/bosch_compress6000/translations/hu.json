@@ -44,7 +44,7 @@
         "description": "Az írás alapból kikapcsolt. Bekapcsolva csak a kiválasztott csoportok változtathatók, csak kérésre (kapcsoló, szám, választó), egyszer, rövid késleltetéssel, és az új értéket visszaolvassuk. Egyébként semmi nem íródik.",
         "data": {
           "poll_interval": "Lekérdezési időköz (mp)",
-          "claim_legacy_entities": "A régi MQTT (HomeGate) entitások átvétele",
+          "claim_legacy_entities": "A régi MQTT entitások átvétele",
           "write_enabled": "Írás engedélyezése (alapból ki)",
           "write_groups": "Módosítható csoportok"
         }
