@@ -14,7 +14,6 @@ from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.bosch_compress6000 import runtime
 from custom_components.bosch_compress6000.const import (
-    CONF_CLAIM_LEGACY,
     CONF_GATEWAY_PASSWORD,
     CONF_POLL_INTERVAL,
     CONF_PRIVATE_PASSWORD,
@@ -78,7 +77,6 @@ def make_entry(**options: Any) -> MockConfigEntry:
             CONF_POLL_INTERVAL: 120,
             CONF_WRITE_ENABLED: False,
             CONF_WRITE_GROUPS: [],
-            CONF_CLAIM_LEGACY: True,
             **options,
         },
     )

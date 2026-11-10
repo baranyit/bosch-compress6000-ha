@@ -9,7 +9,6 @@ CONF_PRIVATE_PASSWORD = "private_password"
 CONF_POLL_INTERVAL = "poll_interval"
 CONF_WRITE_ENABLED = "write_enabled"
 CONF_WRITE_GROUPS = "write_groups"
-CONF_CLAIM_LEGACY = "claim_legacy_entities"
 
 DEFAULT_NAME = "heatpump"
 DEVICE_MANUFACTURER = "Bosch"
@@ -31,9 +30,9 @@ ENERGY_GRACE_MINUTES = 5
 # Explicit user commands are debounced, then written once (latest value wins per point).
 COMMAND_DEBOUNCE = 1.5
 
-# unique_id of the four entities an earlier MQTT-based setup provided. They are kept so history and
-# the Energy dashboard continue; the integration claims the old MQTT entries (see migration.py).
-LEGACY_MQTT_UNIQUE_IDS: dict[str, str] = {
+# Fixed unique IDs of the four original entities. They never change, so history and the Energy
+# dashboard statistics of existing installations continue.
+FIXED_UNIQUE_IDS: dict[str, str] = {
     "total_energy": "bosch_energymonitoring_total",
     "compressor_energy": "bosch_energymonitoring_compressor",
     "eheater_energy": "bosch_energymonitoring_eheater",

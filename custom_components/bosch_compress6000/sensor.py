@@ -78,9 +78,9 @@ STATE_SENSORS: tuple[SensorEntityDescription, ...] = (
     ),
 )
 
-# The three consumption sensors keep the names of the retired MQTT entities, so their entity IDs
-# (sensor.bosch_total_consumed_energy_kwh, ...) and statistics continue unchanged.
-LEGACY_ENERGY_NAMES = {
+# The three consumption sensors keep fixed names, so their entity IDs
+# (sensor.bosch_total_consumed_energy_kwh, ...) and statistics stay unchanged.
+ENERGY_NAMES = {
     "total_energy": "Bosch total consumed energy (kwh)",
     "compressor_energy": "Bosch compressor consumed energy (kwh)",
     "eheater_energy": "Bosch eheater consumed energy (kwh)",
@@ -89,7 +89,7 @@ LEGACY_ENERGY_NAMES = {
 
 @dataclass(frozen=True, kw_only=True)
 class EnergyDescription(SensorEntityDescription):
-    legacy_name: str | None = None
+    fixed_name: str | None = None
 
 
 ENERGY_SENSORS: tuple[EnergyDescription, ...] = tuple(
@@ -99,7 +99,7 @@ ENERGY_SENSORS: tuple[EnergyDescription, ...] = tuple(
         device_class=SensorDeviceClass.ENERGY,
         native_unit_of_measurement=UnitOfEnergy.KILO_WATT_HOUR,
         state_class=SensorStateClass.TOTAL,
-        legacy_name=LEGACY_ENERGY_NAMES.get(point.key),
+        fixed_name=ENERGY_NAMES.get(point.key),
     )
     for point in ENERGY_POINTS
 )
@@ -136,8 +136,8 @@ class StateSensor(Km200Entity, SensorEntity):
 class EnergySensor(Km200Entity, SensorEntity):
     """Consumption of the last completed hour.
 
-    ``state_class`` stays ``total`` with ``last_reset`` = start of that hour, exactly like the
-    retired MQTT sensors, so the Energy dashboard statistics are compatible. A missing hour never
+    ``state_class`` stays ``total`` with ``last_reset`` = start of that hour, which is what the
+    Energy dashboard expects. A missing hour never
     becomes 0.0: the previous sample stays until a newer one arrives.
     """
 
@@ -147,9 +147,9 @@ class EnergySensor(Km200Entity, SensorEntity):
     def __init__(self, entry: Km200ConfigEntry, description: EnergyDescription) -> None:
         super().__init__(entry, description.key)
         self.entity_description = description
-        if description.legacy_name is not None:
+        if description.fixed_name is not None:
             self._attr_has_entity_name = False
-            self._attr_name = description.legacy_name
+            self._attr_name = description.fixed_name
 
     @property
     def available(self) -> bool:

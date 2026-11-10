@@ -2,23 +2,22 @@
 
 Guidance for AI coding agents (Claude Code, Codex, Copilot, Cursor, etc.). The project is in
 **maintenance mode**: it is released software with users and history, not a prototype. The code and its
-docstrings are the documentation (protocol and field facts: `protocol.py`; crypto: `crypto.py`;
-entity migration: `migration.py`). There is no `docs/` folder; keep knowledge in code, tests, this file
+docstrings are the documentation (protocol and field facts: `protocol.py`; crypto: `crypto.py`). There is no `docs/` folder; keep knowledge in code, tests, this file
 and `README.md`. Chat with the maintainer is in **Hungarian**; everything committed is in **English**
 (Hungarian only in `translations/hu.json`).
 
 ## What it is
 
 A native async Home Assistant integration for a Bosch Compress 6000 heat pump behind a Bosch/Buderus
-**KM200-family gateway** (local encrypted HTTP, no cloud, no MQTT): metrics, hourly energy, and an
+**KM200-family gateway** (local encrypted HTTP, no cloud): metrics, hourly energy, and an
 opt-in remote control (extra hot water, hot water and heating settings). The gateway is a small
 embedded web server, so it is treated as **fragile**: serialized, spaced requests, and no write unless a
 user asked.
 
 ## Invariants (a change that breaks one is rejected even if tests pass)
 
-1. **Four legacy entities are frozen**: entity IDs, unique IDs, names and device (see `migration.py`).
-   Changing them splits users' history and Energy statistics.
+1. **Four original entities are frozen**: entity IDs, unique IDs, names and device (`FIXED_UNIQUE_IDS`
+   in `const.py`). Changing them splits users' history and Energy statistics.
 2. **Energy contract**: `state_class: total` + `last_reset` (start of the completed hour) +
    `force_update`. Never `total_increasing`. An hour with `c == 0` is *no sample*, never 0.0: the
    previous sample stays and the state is unknown before the first one.
@@ -46,7 +45,7 @@ custom_components/bosch_compress6000/
   write_transport.py write_backend.py commands.py      the ONLY write route
   runtime.py                                           client/transport factories
   coordinator.py entity.py sensor.py switch.py number.py select.py
-  config_flow.py diagnostics.py migration.py __init__.py   Home Assistant layer
+  config_flow.py diagnostics.py __init__.py   Home Assistant layer
   brand/ strings.json translations/{en,hu}.json
 tests/        unit + HA tests on tests/fakes.py; tests/hardware is opt-in, never in CI
 assets/       logo masters (the brand/ PNGs are resized from them)

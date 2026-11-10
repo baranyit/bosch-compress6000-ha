@@ -21,7 +21,7 @@ from custom_components.bosch_compress6000.const import (
 from ..fakes import REC, FakeGateway, hourly
 from .conftest import make_entry
 
-LEGACY_ENTITY_IDS = {
+FIXED_ENTITY_IDS = {
     "bosch_energymonitoring_total": "sensor.bosch_total_consumed_energy_kwh",
     "bosch_energymonitoring_compressor": "sensor.bosch_compressor_consumed_energy_kwh",
     "bosch_energymonitoring_eheater": "sensor.bosch_eheater_consumed_energy_kwh",
@@ -35,12 +35,12 @@ async def setup(hass: HomeAssistant, entry: MockConfigEntry) -> None:
     await hass.async_block_till_done()
 
 
-async def test_legacy_entity_ids_and_unique_ids_are_preserved(
+async def test_fixed_entity_ids_and_unique_ids_are_preserved(
     hass: HomeAssistant, gateway: FakeGateway, entry: MockConfigEntry
 ) -> None:
     await setup(hass, entry)
     registry = er.async_get(hass)
-    for unique_id, entity_id in LEGACY_ENTITY_IDS.items():
+    for unique_id, entity_id in FIXED_ENTITY_IDS.items():
         found = registry.async_get_entity_id("sensor", DOMAIN, unique_id)
         assert found == entity_id, unique_id
     assert hass.states.get("sensor.heatpump_outdoor_temperature").state == "4.3"
@@ -79,37 +79,7 @@ async def test_the_device_groups_all_entities(
     assert device is not None
     assert (device.name, device.manufacturer, device.model) == ("heatpump", "Bosch", "Compress6000")
     entities = er.async_entries_for_device(er.async_get(hass), device.id)
-    assert {e.entity_id for e in entities} >= set(LEGACY_ENTITY_IDS.values())
-
-
-async def test_old_mqtt_registry_entries_are_taken_over(
-    hass: HomeAssistant, gateway: FakeGateway, entry: MockConfigEntry
-) -> None:
-    registry = er.async_get(hass)
-    for unique_id, entity_id in LEGACY_ENTITY_IDS.items():
-        domain, object_id = entity_id.split(".")
-        registry.async_get_or_create(domain, "mqtt", unique_id, suggested_object_id=object_id)
-    await setup(hass, entry)
-    for unique_id, entity_id in LEGACY_ENTITY_IDS.items():
-        claimed = registry.async_get(entity_id)
-        assert claimed is not None and claimed.platform == DOMAIN
-        assert claimed.unique_id == unique_id  # statistics follow the entity ID
-        assert claimed.config_entry_id == entry.entry_id
-        assert hass.states.get(entity_id).state != STATE_UNKNOWN or "energy" in entity_id
-    assert registry.async_get_entity_id("sensor", "mqtt", "bosch_outdoor_temperature") is None
-
-
-async def test_claiming_can_be_turned_off(hass: HomeAssistant, gateway: FakeGateway) -> None:
-    registry = er.async_get(hass)
-    registry.async_get_or_create(
-        "sensor",
-        "mqtt",
-        "bosch_outdoor_temperature",
-        suggested_object_id="heatpump_outdoor_temperature",
-    )
-    await setup(hass, make_entry(claim_legacy_entities=False))
-    old = registry.async_get_entity_id("sensor", "mqtt", "bosch_outdoor_temperature")
-    assert old == "sensor.heatpump_outdoor_temperature"
+    assert {e.entity_id for e in entities} >= set(FIXED_ENTITY_IDS.values())
 
 
 async def test_setup_and_polling_make_zero_writes(
