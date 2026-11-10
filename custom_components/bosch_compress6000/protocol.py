@@ -157,7 +157,7 @@ def parse_hour_sample(text: str, hour: int) -> float | None:
     """Value of one hour of a daily recording, or ``None`` when that hour has no data.
 
     An hour with ``c == 0`` samples has no data: it is *not* zero. Reporting zero for it would
-    pollute the Energy statistics, which is what the retired bridge did.
+    pollute the Energy statistics.
     """
     try:
         data = json.loads(text)

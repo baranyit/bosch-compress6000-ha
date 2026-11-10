@@ -20,7 +20,6 @@ from homeassistant.helpers.selector import (
 )
 
 from .const import (
-    CONF_CLAIM_LEGACY,
     CONF_GATEWAY_PASSWORD,
     CONF_POLL_INTERVAL,
     CONF_PRIVATE_PASSWORD,
@@ -96,7 +95,6 @@ class Km200ConfigFlow(ConfigFlow, domain=DOMAIN):
                         CONF_POLL_INTERVAL: DEFAULT_POLL_INTERVAL,
                         CONF_WRITE_ENABLED: False,
                         CONF_WRITE_GROUPS: [],
-                        CONF_CLAIM_LEGACY: True,
                     },
                 )
             errors["base"] = error or "unknown"
@@ -174,7 +172,6 @@ class Km200OptionsFlow(OptionsFlowWithReload):
                     CONF_POLL_INTERVAL,
                     default=current.get(CONF_POLL_INTERVAL, DEFAULT_POLL_INTERVAL),
                 ): vol.All(int, vol.Range(min=MIN_POLL_INTERVAL, max=MAX_POLL_INTERVAL)),
-                vol.Required(CONF_CLAIM_LEGACY, default=current.get(CONF_CLAIM_LEGACY, True)): bool,
                 vol.Required(
                     CONF_WRITE_ENABLED, default=current.get(CONF_WRITE_ENABLED, False)
                 ): bool,

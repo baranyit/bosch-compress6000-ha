@@ -73,7 +73,7 @@ async def test_options_require_a_group_when_writing_is_on(
     entry.add_to_hass(hass)
     assert await hass.config_entries.async_setup(entry.entry_id)
     flow = await hass.config_entries.options.async_init(entry.entry_id)
-    base = {"poll_interval": 120, "claim_legacy_entities": True}
+    base = {"poll_interval": 120}
     bad = await hass.config_entries.options.async_configure(
         flow["flow_id"], {**base, CONF_WRITE_ENABLED: True, CONF_WRITE_GROUPS: []}
     )

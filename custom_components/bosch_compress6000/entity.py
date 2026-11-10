@@ -7,15 +7,15 @@ from homeassistant.helpers.device_registry import DeviceInfo
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from . import Km200ConfigEntry, device_identifier
-from .const import DEVICE_MANUFACTURER, DEVICE_MODEL, DOMAIN, LEGACY_MQTT_UNIQUE_IDS
+from .const import DEVICE_MANUFACTURER, DEVICE_MODEL, DOMAIN, FIXED_UNIQUE_IDS
 from .coordinator import Km200Coordinator
 from .errors import CommandRejectedError
 from .models import Reading
 
 
 def unique_id_for(key: str) -> str:
-    """Legacy IDs are kept; everything new is ``bosch_<key>``."""
-    return LEGACY_MQTT_UNIQUE_IDS.get(key, f"bosch_{key}")
+    """The four original IDs are fixed; everything new is ``bosch_<key>``."""
+    return FIXED_UNIQUE_IDS.get(key, f"bosch_{key}")
 
 
 class Km200Entity(CoordinatorEntity[Km200Coordinator]):

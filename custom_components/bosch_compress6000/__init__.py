@@ -1,4 +1,4 @@
-"""Bosch Compress 6000 integration for Home Assistant (local KM200 gateway, no cloud, no MQTT).
+"""Bosch Compress 6000 integration for Home Assistant (local KM200 gateway, no cloud).
 
 Read-only by default. Setup, polling, reload, diagnostics and unload never write. Only with write
 mode enabled in the options, for explicitly selected groups, a command a user asked for is written
@@ -23,7 +23,6 @@ from .client import Km200ReadClient
 from .commands import CommandExecutor, CommandPermissions
 from .const import (
     COMMAND_DEBOUNCE,
-    CONF_CLAIM_LEGACY,
     CONF_GATEWAY_PASSWORD,
     CONF_POLL_INTERVAL,
     CONF_PRIVATE_PASSWORD,
@@ -35,7 +34,6 @@ from .const import (
     DOMAIN,
 )
 from .coordinator import Km200Coordinator
-from .migration import async_claim_legacy_entities
 from .protocol import POINTS, WriteGroup
 from .runtime import build_client, build_writable_client
 from .write_transport import WritableTransport
@@ -97,15 +95,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: Km200ConfigEntry) -> boo
         coordinator.executor = executor
     entry.runtime_data = Km200RuntimeData(coordinator, client, executor)
 
-    device = dr.async_get(hass).async_get_or_create(
+    dr.async_get(hass).async_get_or_create(
         config_entry_id=entry.entry_id,
         identifiers={device_identifier(entry)},
         manufacturer=DEVICE_MANUFACTURER,
         model=DEVICE_MODEL,
         name=entry.data[CONF_NAME],
     )
-    if entry.options.get(CONF_CLAIM_LEGACY, True):
-        async_claim_legacy_entities(hass, entry, device.id)
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
