@@ -7,7 +7,7 @@
 [![Hassfest](https://github.com/baranyit/bosch-compress6000-ha/actions/workflows/hassfest.yml/badge.svg)](https://github.com/baranyit/bosch-compress6000-ha/actions/workflows/hassfest.yml)
 [![HACS validation](https://github.com/baranyit/bosch-compress6000-ha/actions/workflows/hacs.yml/badge.svg)](https://github.com/baranyit/bosch-compress6000-ha/actions/workflows/hacs.yml)
 
-Status: beta (0.2.0, unreleased).
+Status: beta (0.2.1, unreleased).
 
 A custom integration for a Bosch Compress 6000 heat pump behind a Bosch/Buderus KM200-family
 gateway. Local only (encrypted HTTP), no cloud.
