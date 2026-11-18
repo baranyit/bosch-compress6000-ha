@@ -3,7 +3,7 @@
 ## 0.2.1 (unreleased, beta)
 
 Patch: GitHub Actions are pinned to commit SHAs and Dependabot (Actions and pip, weekly) keeps them
-current. The `main` branch is protected by a ruleset (pull request and passing checks required).
+current, and `SECURITY.md` describes private vulnerability reporting. The `main` branch is protected by a ruleset (pull request and passing checks required).
 No behaviour change.
 
 ## 0.2.0 (unreleased, beta)
