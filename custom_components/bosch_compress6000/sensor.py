@@ -1,4 +1,4 @@
-"""Sensors: live metrics and the hourly energy consumption."""
+"""Sensors: live metrics, read-only settings and the hourly energy consumption."""
 
 from __future__ import annotations
 
@@ -55,6 +55,21 @@ STATE_SENSORS: tuple[SensorEntityDescription, ...] = (
     _temperature("dhw_setpoint"),
     _percentage("modulation"),
     _percentage("pump_modulation"),
+    # Settings of the heat pump, read-only: writes to them are not verified on hardware.
+    SensorEntityDescription(key="dhw_operation_mode", translation_key="dhw_operation_mode"),
+    SensorEntityDescription(key="heating_operation_mode", translation_key="heating_operation_mode"),
+    SensorEntityDescription(
+        key="dhw_temperature_high",
+        translation_key="dhw_temperature_high",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
+    SensorEntityDescription(
+        key="heating_manual_setpoint",
+        translation_key="heating_manual_setpoint",
+        device_class=SensorDeviceClass.TEMPERATURE,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
+    ),
     SensorEntityDescription(
         key="number_of_starts",
         translation_key="number_of_starts",
@@ -126,11 +141,9 @@ class StateSensor(Km200Entity, SensorEntity):
         self.entity_description = description
 
     @property
-    def native_value(self) -> float | None:
+    def native_value(self) -> float | str | None:
         reading = self.reading
-        if reading is None or isinstance(reading.value, str):
-            return None
-        return reading.value
+        return reading.value if reading else None
 
 
 class EnergySensor(Km200Entity, SensorEntity):

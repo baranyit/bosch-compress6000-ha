@@ -11,7 +11,12 @@ from custom_components.bosch_compress6000.commands import (
 )
 from custom_components.bosch_compress6000.errors import CommandRejectedError, RejectReason
 from custom_components.bosch_compress6000.models import Reading
-from custom_components.bosch_compress6000.protocol import POINT_BY_KEY, WriteGroup
+from custom_components.bosch_compress6000.protocol import (
+    POINT_BY_KEY,
+    Confidence,
+    Point,
+    WriteGroup,
+)
 from custom_components.bosch_compress6000.write_transport import WritableTransport
 
 from .fakes import KEY, FakeGateway, VirtualClock
@@ -35,13 +40,23 @@ def test_write_mode_off_by_default() -> None:
     )
 
 
-def test_groups_are_separate_opt_ins() -> None:
-    only_hot_water = CommandPermissions(True, frozenset({WriteGroup.HOT_WATER}))
-    assert reason("dhw_charge", CHARGE, "start", only_hot_water) == RejectReason.GROUP_NOT_ALLOWED
-    assert (
-        validate_command(POINT_BY_KEY["dhw_temperature_high"], TEMPERATURE, 50.0, only_hot_water)
-        == 50.0
-    )
+def test_a_group_is_a_separate_opt_in() -> None:
+    no_group = CommandPermissions(True, frozenset())
+    assert reason("dhw_charge", CHARGE, "start", no_group) == RejectReason.GROUP_NOT_ALLOWED
+
+
+@pytest.mark.parametrize(
+    "key",
+    [
+        "dhw_operation_mode",
+        "dhw_temperature_high",
+        "heating_operation_mode",
+        "heating_manual_setpoint",
+    ],
+)
+def test_unverified_settings_can_never_be_written(key: str) -> None:
+    reading = Reading(45.0, "C", 30.0, 43.0, writeable=True)
+    assert reason(key, reading, 40.0, ALL) == RejectReason.NOT_WRITEABLE
 
 
 def test_read_only_points_can_never_be_written() -> None:
@@ -63,14 +78,18 @@ def test_enum_values_are_checked_against_the_device_list() -> None:
 
 
 def test_numbers_are_range_checked_and_never_rounded() -> None:
-    point = POINT_BY_KEY["dhw_temperature_high"]
+    # No catalog point is a number any more; the numeric path is kept for a future group.
+    point = Point("test_number", "test/number", Confidence.STANDARD, WriteGroup.EXTRA_HOT_WATER)
     assert validate_command(point, TEMPERATURE, 52.25, ALL) == 52.25
-    assert reason("dhw_temperature_high", TEMPERATURE, 39.9, ALL) == RejectReason.OUT_OF_RANGE
-    assert reason("dhw_temperature_high", TEMPERATURE, 65.1, ALL) == RejectReason.OUT_OF_RANGE
-    assert (
-        reason("dhw_temperature_high", TEMPERATURE, float("nan"), ALL) == RejectReason.INVALID_VALUE
-    )
-    assert reason("dhw_temperature_high", TEMPERATURE, "hot", ALL) == RejectReason.INVALID_VALUE
+    for value, expected in (
+        (39.9, RejectReason.OUT_OF_RANGE),
+        (65.1, RejectReason.OUT_OF_RANGE),
+        (float("nan"), RejectReason.INVALID_VALUE),
+        ("hot", RejectReason.INVALID_VALUE),
+    ):
+        with pytest.raises(CommandRejectedError) as err:
+            validate_command(point, TEMPERATURE, value, ALL)
+        assert err.value.reason == expected
 
 
 class Harness:
@@ -110,11 +129,11 @@ async def test_nothing_is_sent_before_the_debounce_ends() -> None:
 
 async def test_latest_value_wins_and_one_write_per_point() -> None:
     h = Harness()
-    point = POINT_BY_KEY["dhw_temperature_high"]
-    for value in (50.0, 51.0, 52.0):
+    point = POINT_BY_KEY["dhw_charge"]
+    for value in ("start", "stop", "start"):
         h.executor.submit(point, value)
     await asyncio.sleep(0.1)
-    assert h.gateway.posts == [("dhwCircuits/dhw1/temperatureLevels/high", 52.0)]
+    assert h.gateway.posts == [("dhwCircuits/dhw1/charge", "start")]
     await h.executor.close()
 
 

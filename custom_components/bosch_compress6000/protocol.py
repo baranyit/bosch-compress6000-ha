@@ -15,12 +15,17 @@ Observed on the real gateway (Compress 6000, 2026-11-09):
 - ``dhw_charge`` allows ``stop``/``start``; ``dhw_operation_mode`` allows ``Off``, ``low``,
   ``high``, ``ownprogram``, ``eco`` (mixed case, used verbatim); ``heating_operation_mode`` allows
   ``auto``, ``manual``; ``dhw_temperature_high`` is limited to 30..43 C.
-- ``writeable`` is true exactly for the points with a write group. Units are ``C``, ``%`` and a
-  blank unit for the start counter.
+- The device reports ``writeable`` for the five control points; only ``dhw_charge`` has a write
+  group. Units are ``C``, ``%`` and a blank unit for the start counter.
 - Energy recordings answer for all four points; heat output / compressor is about 4.5, consistent
   with kWh (the unit is not documented by the vendor). A real zero hour has samples (``c > 0``).
-- One ``dhw_charge`` start, observed for 15 s, then stop, was accepted and read back. The physical
-  effect and the run time of a start are unverified, as are writes to the other four points.
+- One ``dhw_charge`` start, observed for 15 s, then stop, was accepted and read back: the only
+  write verified on hardware, and the only point with a write group.
+- ``dhw_operation_mode``, ``dhw_temperature_high``, ``heating_operation_mode`` and
+  ``heating_manual_setpoint`` are read-only sensors. Writing them has never been tried on hardware,
+  so they get no write group (and no number/select entity) until a hardware-approved test
+  (``tests/hardware/test_write_validation.py`` pattern) shows what a write does and that it can be
+  restored. The physical effect and run time of a ``dhw_charge`` start are not documented either.
 
 Not catalogued on purpose: the lifetime ``heatSources/energyMonitoring/consumption`` (unit
 unverified), cooling, solar, pool, smart grid, time programs, a second heating or hot water circuit.
@@ -41,11 +46,13 @@ from .models import Reading
 
 
 class WriteGroup(StrEnum):
-    """Separate write opt-ins. Writing is off by default; each group is enabled on its own."""
+    """Separate write opt-ins. Writing is off by default; each group is enabled on its own.
+
+    Only groups whose writes were verified on hardware exist. Stored options naming a removed group
+    (``hot_water``, ``heating``) are ignored.
+    """
 
     EXTRA_HOT_WATER = "extra_hot_water"
-    HOT_WATER = "hot_water"
-    HEATING = "heating"
 
 
 class Confidence(StrEnum):
@@ -94,12 +101,13 @@ POINTS: tuple[Point, ...] = (
     Point("number_of_starts", HS + "numberOfStarts", S),
     Point("system_pressure", HS + "systemPressure", S),
     Point("power_setpoint", HS + "powerSetpoint", S),
-    # The only writable resources (each behind its own opt-in).
+    # Settings the device reports as writeable, shown read-only (writes unverified on hardware).
+    Point("dhw_operation_mode", DHW + "operationMode", S),
+    Point("dhw_temperature_high", DHW + "temperatureLevels/high", S),
+    Point("heating_operation_mode", HC1 + "operationMode", H),
+    Point("heating_manual_setpoint", HC1 + "manualRoomSetpoint", S),
+    # The only writable resource (behind its own opt-in); verified on hardware.
     Point("dhw_charge", DHW + "charge", H, WriteGroup.EXTRA_HOT_WATER),
-    Point("dhw_operation_mode", DHW + "operationMode", S, WriteGroup.HOT_WATER),
-    Point("dhw_temperature_high", DHW + "temperatureLevels/high", S, WriteGroup.HOT_WATER),
-    Point("heating_operation_mode", HC1 + "operationMode", H, WriteGroup.HEATING),
-    Point("heating_manual_setpoint", HC1 + "manualRoomSetpoint", S, WriteGroup.HEATING),
 )
 
 ENERGY_POINTS: tuple[EnergyPoint, ...] = (
