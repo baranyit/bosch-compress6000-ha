@@ -17,6 +17,7 @@ from homeassistant.const import (
     UnitOfEnergy,
     UnitOfPressure,
     UnitOfTemperature,
+    UnitOfVolumeFlowRate,
 )
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
@@ -83,6 +84,16 @@ STATE_SENSORS: tuple[SensorEntityDescription, ...] = (
         native_unit_of_measurement=UnitOfPressure.BAR,
         state_class=SensorStateClass.MEASUREMENT,
         entity_category=EntityCategory.DIAGNOSTIC,
+    ),
+    _temperature("appliance_supply_temperature"),
+    _temperature("supply_setpoint"),
+    SensorEntityDescription(key="health_status", translation_key="health_status"),
+    SensorEntityDescription(
+        key="dhw_water_flow",
+        translation_key="dhw_water_flow",
+        device_class=SensorDeviceClass.VOLUME_FLOW_RATE,
+        native_unit_of_measurement=UnitOfVolumeFlowRate.LITERS_PER_MINUTE,
+        state_class=SensorStateClass.MEASUREMENT,
     ),
     SensorEntityDescription(
         key="power_setpoint",

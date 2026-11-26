@@ -21,6 +21,11 @@ Observed on the real gateway (Compress 6000, 2026-11-09):
   with kWh (the unit is not documented by the vendor). A real zero hour has samples (``c > 0``).
 - One ``dhw_charge`` start, observed for 15 s, then stop, was accepted and read back: the only
   write verified on hardware, and the only point with a write group.
+- Full tree survey (read-only, 2026-11-26): the gateway is an iCom (``NSC_ICOM_GATEWAY``, EMS2) and
+  exposes no TC0/TC3/PC0, defrost state, flow (except hot water), pressure or fault list. The
+  compressor / evaporator temperature, compressor power and eHeater status points are in its tree
+  but answer HTTP 403, so they are not catalogued. ``notifications`` was an empty directory.
+  ``CHpumpModulation`` and ``hc1/pumpModulation`` read 0 % while the compressor runs: not useful.
 - ``dhw_operation_mode``, ``dhw_temperature_high``, ``heating_operation_mode`` and
   ``heating_manual_setpoint`` are read-only sensors. Writing them has never been tried on hardware,
   so they get no write group (and no number/select entity) until a hardware-approved test
@@ -101,6 +106,10 @@ POINTS: tuple[Point, ...] = (
     Point("number_of_starts", HS + "numberOfStarts", S),
     Point("system_pressure", HS + "systemPressure", S),
     Point("power_setpoint", HS + "powerSetpoint", S),
+    Point("appliance_supply_temperature", HS + "applianceSupplyTemperature", H),
+    Point("supply_setpoint", HS + "supplyTemperatureSetpoint", H),
+    Point("health_status", "system/healthStatus", H),
+    Point("dhw_water_flow", DHW + "waterFlow", H),
     # Settings the device reports as writeable, shown read-only (writes unverified on hardware).
     Point("dhw_operation_mode", DHW + "operationMode", S),
     Point("dhw_temperature_high", DHW + "temperatureLevels/high", S),
