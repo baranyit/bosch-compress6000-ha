@@ -70,6 +70,10 @@ DEFAULT_POINTS: dict[str, dict] = {
     "dhwCircuits/dhw1/currentSetpoint": float_point(55.0),
     "heatSources/numberOfStarts": float_point(1234, unit=""),
     "heatSources/systemPressure": float_point(1.6, unit="bar"),
+    "heatSources/applianceSupplyTemperature": float_point(36.0),
+    "heatSources/supplyTemperatureSetpoint": float_point(34.0),
+    "system/healthStatus": string_point("ok", ["error", "maintenance", "ok"]),
+    "dhwCircuits/dhw1/waterFlow": float_point(0.0, unit="l/min"),
     "dhwCircuits/dhw1/charge": string_point("stop", ["start", "stop"], writeable=True),
     "dhwCircuits/dhw1/operationMode": string_point("auto", ["auto", "high", "off"], writeable=True),
     "dhwCircuits/dhw1/temperatureLevels/high": float_point(

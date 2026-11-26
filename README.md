@@ -7,7 +7,7 @@
 [![Hassfest](https://github.com/baranyit/bosch-compress6000-ha/actions/workflows/hassfest.yml/badge.svg)](https://github.com/baranyit/bosch-compress6000-ha/actions/workflows/hassfest.yml)
 [![HACS validation](https://github.com/baranyit/bosch-compress6000-ha/actions/workflows/hacs.yml/badge.svg)](https://github.com/baranyit/bosch-compress6000-ha/actions/workflows/hacs.yml)
 
-Status: beta (0.3.0, 2026-11-25).
+Status: beta (0.4.0, 2026-11-26).
 
 A custom integration for a Bosch Compress 6000 heat pump behind a Bosch/Buderus KM200-family
 gateway. Local only (encrypted HTTP), no cloud.
@@ -17,7 +17,7 @@ gateway. Local only (encrypted HTTP), no cloud.
 | Kind | Entities |
 |---|---|
 | Energy (hourly, Energy-dashboard compatible) | `sensor.bosch_total_consumed_energy_kwh`, `sensor.bosch_compressor_consumed_energy_kwh`, `sensor.bosch_eheater_consumed_energy_kwh`, plus *Heat output energy* |
-| Metrics | outdoor, supply, return, room and hot water temperatures, setpoints, modulation, pump modulation, compressor starts, system pressure |
+| Metrics | outdoor, supply, return, room and hot water temperatures, setpoints, modulation, pump modulation, compressor starts, system pressure, appliance supply temperature, supply setpoint, health status, hot water flow |
 | Settings (read-only) | hot water mode and target temperature, heating mode and manual room setpoint |
 | Remote control (off by default) | **Extra hot water** switch |
 

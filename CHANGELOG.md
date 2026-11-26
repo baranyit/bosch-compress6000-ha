@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.0 (beta)
+
+New read-only sensors from a full read-only survey of the gateway: appliance supply temperature,
+supply setpoint, health status (`ok`/`maintenance`/`error`) and hot water flow. The default poll
+interval is now 60 s (was 120 s; the minimum stays 30 s and is still raised to the derived minimum
+for the number of points). The survey found no TC0/TC3, circulation pump, defrost, fault list or
+system pressure on this gateway: compressor and evaporator temperature, compressor power and eHeater
+status exist in its tree but answer HTTP 403, so they are not catalogued. Existing installations keep
+their stored poll interval; only new setups get 60 s. No entity was changed or removed.
+
 ## 0.3.0 (beta)
 
 Breaking: only writes verified on real hardware stay available. Hot water mode, hot water target
