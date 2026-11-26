@@ -98,6 +98,18 @@
       "power_setpoint": {
         "name": "Teljesítmény alapjel"
       },
+      "appliance_supply_temperature": {
+        "name": "Készülék előremenő hőmérséklet"
+      },
+      "supply_setpoint": {
+        "name": "Előremenő alapjel"
+      },
+      "health_status": {
+        "name": "Rendszerállapot"
+      },
+      "dhw_water_flow": {
+        "name": "Melegvíz-áramlás"
+      },
       "total_energy": {
         "name": "Összes fogyasztott energia"
       },

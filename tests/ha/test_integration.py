@@ -103,6 +103,10 @@ async def test_points_missing_on_this_gateway_get_no_entity(
     assert not any("power_setpoint" in entity_id for entity_id in ids)
     assert hass.states.get("sensor.heatpump_supply_temperature").state == "32.1"
     assert hass.states.get("sensor.heatpump_system_pressure").state == "1.6"
+    assert hass.states.get("sensor.heatpump_appliance_supply_temperature").state == "36.0"
+    assert hass.states.get("sensor.heatpump_supply_setpoint").state == "34.0"
+    assert hass.states.get("sensor.heatpump_health_status").state == "ok"
+    assert hass.states.get("sensor.heatpump_hot_water_flow").state == "0.0"
 
 
 async def test_writing_is_refused_while_write_mode_is_off(

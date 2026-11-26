@@ -98,6 +98,18 @@
       "power_setpoint": {
         "name": "Power setpoint"
       },
+      "appliance_supply_temperature": {
+        "name": "Appliance supply temperature"
+      },
+      "supply_setpoint": {
+        "name": "Supply setpoint"
+      },
+      "health_status": {
+        "name": "Health status"
+      },
+      "dhw_water_flow": {
+        "name": "Hot water flow"
+      },
       "total_energy": {
         "name": "Total consumed energy"
       },
