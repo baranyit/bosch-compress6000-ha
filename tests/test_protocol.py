@@ -94,12 +94,7 @@ def test_catalog_is_consistent() -> None:
     paths = [p.path for p in POINTS] + [p.path for p in ENERGY_POINTS]
     assert len(paths) == len(set(paths))
     assert not any(path.startswith("/") for path in paths)
-    # Writable resources are an explicit, small list (one switch, two numbers, two selects).
-    assert sorted(p.key for p in POINTS if p.group is not None) == [
-        "dhw_charge",
-        "dhw_operation_mode",
-        "dhw_temperature_high",
-        "heating_manual_setpoint",
-        "heating_operation_mode",
-    ]
+    # Only the hardware-verified resource is writable; the other settings are read-only.
+    assert [p.key for p in POINTS if p.group is not None] == ["dhw_charge"]
+    assert list(WriteGroup) == [WriteGroup.EXTRA_HOT_WATER]
     assert {p.group for p in POINTS if p.key == "dhw_charge"} == {WriteGroup.EXTRA_HOT_WATER}

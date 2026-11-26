@@ -133,54 +133,20 @@ async def test_extra_hot_water_is_written_once_after_the_debounce_and_read_back(
     assert hass.states.get("switch.heatpump_extra_hot_water").state == STATE_ON  # read back
 
 
-async def test_a_group_that_is_not_enabled_stays_read_only(
+async def test_hot_water_and_heating_settings_are_read_only_sensors(
     hass: HomeAssistant, gateway: FakeGateway
 ) -> None:
-    entry = make_entry(**{CONF_WRITE_ENABLED: True, CONF_WRITE_GROUPS: ["extra_hot_water"]})
+    # Even with every old group stored in the options, nothing but extra hot water is writable.
+    entry = make_entry(
+        **{CONF_WRITE_ENABLED: True, CONF_WRITE_GROUPS: ["extra_hot_water", "hot_water", "heating"]}
+    )
     await setup(hass, entry)
-    with pytest.raises(ServiceValidationError):
-        await hass.services.async_call(
-            "number",
-            "set_value",
-            {"entity_id": "number.heatpump_hot_water_target_temperature", "value": 50},
-            blocking=True,
-        )
+    assert hass.states.get("sensor.heatpump_hot_water_target_temperature") is not None
+    assert hass.states.get("sensor.heatpump_hot_water_mode") is not None
+    assert hass.states.get("sensor.heatpump_heating_mode").state == "auto"
+    assert not hass.services.has_service("number", "set_value")
+    assert not hass.services.has_service("select", "select_option")
     assert gateway.posts == []
-
-
-async def test_number_and_select_write_within_device_limits(
-    hass: HomeAssistant, gateway: FakeGateway
-) -> None:
-    entry = make_entry(**{CONF_WRITE_ENABLED: True, CONF_WRITE_GROUPS: ["hot_water", "heating"]})
-    await setup(hass, entry)
-    state = hass.states.get("number.heatpump_hot_water_target_temperature")
-    assert (state.attributes["min"], state.attributes["max"]) == (40.0, 65.0)
-    with pytest.raises(ServiceValidationError):
-        await hass.services.async_call(
-            "number",
-            "set_value",
-            {"entity_id": "number.heatpump_hot_water_target_temperature", "value": 70},
-            blocking=True,
-        )
-    await hass.services.async_call(
-        "number",
-        "set_value",
-        {"entity_id": "number.heatpump_hot_water_target_temperature", "value": 52.5},
-        blocking=True,
-    )
-    await hass.services.async_call(
-        "select",
-        "select_option",
-        {"entity_id": "select.heatpump_heating_mode", "option": "manual"},
-        blocking=True,
-    )
-    await asyncio.sleep(0.4)
-    await hass.async_block_till_done()
-    assert sorted(gateway.posts) == [
-        ("dhwCircuits/dhw1/temperatureLevels/high", 52.5),
-        ("heatingCircuits/hc1/operationMode", "manual"),
-    ]
-    assert hass.states.get("select.heatpump_heating_mode").state == "manual"
 
 
 async def test_unreachable_gateway_retries_setup(

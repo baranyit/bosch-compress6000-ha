@@ -38,7 +38,7 @@ from .protocol import POINTS, WriteGroup
 from .runtime import build_client, build_writable_client
 from .write_transport import WritableTransport
 
-PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.SWITCH, Platform.NUMBER, Platform.SELECT]
+PLATFORMS: list[Platform] = [Platform.SENSOR, Platform.SWITCH]
 
 
 @dataclass(slots=True)

@@ -41,7 +41,7 @@
     "step": {
       "init": {
         "title": "Lekérdezés és távvezérlés",
-        "description": "Az írás alapból kikapcsolt. Bekapcsolva csak a kiválasztott csoportok változtathatók, csak kérésre (kapcsoló, szám, választó), egyszer, rövid késleltetéssel, és az új értéket visszaolvassuk. Egyébként semmi nem íródik.",
+        "description": "Az írás alapból kikapcsolt. Bekapcsolva csak a kiválasztott csoportok változtathatók, csak kérésre (az extra melegvíz kapcsoló), egyszer, rövid késleltetéssel, és az új értéket visszaolvassuk. Egyébként semmi nem íródik. A melegvíz és fűtés beállítások csak olvashatók, amíg az írásuk nincs hardveren igazolva.",
         "data": {
           "poll_interval": "Lekérdezési időköz (mp)",
           "write_enabled": "Írás engedélyezése (alapból ki)",
@@ -56,9 +56,7 @@
   "selector": {
     "write_groups": {
       "options": {
-        "extra_hot_water": "Extra melegvíz (egy töltés indítása/leállítása)",
-        "hot_water": "Melegvíz üzemmód és hőmérséklet",
-        "heating": "Fűtés üzemmód és kézi szobahőmérséklet"
+        "extra_hot_water": "Extra melegvíz (egy töltés indítása/leállítása)"
       }
     }
   },
@@ -111,27 +109,23 @@
       },
       "heat_output_energy": {
         "name": "Leadott hőenergia"
-      }
-    },
-    "switch": {
-      "dhw_charge": {
-        "name": "Extra melegvíz"
-      }
-    },
-    "number": {
+      },
       "dhw_temperature_high": {
         "name": "Melegvíz célhőmérséklet"
       },
       "heating_manual_setpoint": {
         "name": "Kézi szoba alapjel"
-      }
-    },
-    "select": {
+      },
       "dhw_operation_mode": {
         "name": "Melegvíz üzemmód"
       },
       "heating_operation_mode": {
         "name": "Fűtés üzemmód"
+      }
+    },
+    "switch": {
+      "dhw_charge": {
+        "name": "Extra melegvíz"
       }
     }
   },

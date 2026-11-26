@@ -10,7 +10,7 @@ and `README.md`. Chat with the maintainer is in **Hungarian**; everything commit
 
 A native async Home Assistant integration for a Bosch Compress 6000 heat pump behind a Bosch/Buderus
 **KM200-family gateway** (local encrypted HTTP, no cloud): metrics, hourly energy, and an
-opt-in remote control (extra hot water, hot water and heating settings). The gateway is a small
+opt-in remote control (extra hot water; hot water and heating settings are read-only). The gateway is a small
 embedded web server, so it is treated as **fragile**: serialized, spaced requests, and no write unless a
 user asked.
 
@@ -22,9 +22,9 @@ user asked.
    `force_update`. Never `total_increasing`. An hour with `c == 0` is *no sample*, never 0.0: the
    previous sample stays and the state is unknown before the first one.
 3. **No automatic writes.** Setup, polling, reload, reconnect, diagnostics and unload make zero POSTs.
-   A write exists only because a user used a switch/number/select.
-4. **Write mode is off by default**, with separate group opt-ins (`extra_hot_water`, `hot_water`,
-   `heating`). Only catalog points with a `group` can be written, and the device's own `writeable`,
+   A write exists only because a user used the extra hot water switch.
+4. **Write mode is off by default**, with a separate group opt-in (`extra_hot_water`; a group exists only
+   for writes verified on hardware). Only catalog points with a `group` can be written, and the device's own `writeable`,
    `allowedValues`, `minValue`, `maxValue` must agree. Writes are debounced, latest-value-wins, one
    per point, followed by one read-back. No retries, no replay; unwritten commands are dropped on unload.
 5. **Never silently round or guess**: out-of-range or unknown values are rejected before any request.
@@ -44,7 +44,7 @@ custom_components/bosch_compress6000/
   transport.py client.py http_backend.py               READ path (never references writes)
   write_transport.py write_backend.py commands.py      the ONLY write route
   runtime.py                                           client/transport factories
-  coordinator.py entity.py sensor.py switch.py number.py select.py
+  coordinator.py entity.py sensor.py switch.py
   config_flow.py diagnostics.py __init__.py   Home Assistant layer
   brand/ strings.json translations/{en,hu}.json
 tests/        unit + HA tests on tests/fakes.py; tests/hardware is opt-in, never in CI
@@ -86,7 +86,8 @@ and `VirtualClock` (never sleeps); real sleeps stay below 0.5 s.
 - Any hardware write needs separate human approval and a recovery plan (one point, observe, restore);
   `tests/hardware/test_write_validation.py` is the pattern and also needs `BOSCH_HW_WRITE_OK=1`.
 - Validated so far: reads, hourly recordings and one extra hot water start/stop (details in
-  `protocol.py`). Writes to the hot water and heating points are untested on hardware.
+  `protocol.py`). Writes to the hot water and heating points are untested on hardware, so they are
+  read-only sensors without a write group; a new write group needs a hardware-approved test first.
 
 ## Versioning and releases
 

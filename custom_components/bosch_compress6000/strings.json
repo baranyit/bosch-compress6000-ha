@@ -41,7 +41,7 @@
     "step": {
       "init": {
         "title": "Polling and remote control",
-        "description": "Writing is off by default. When enabled, only the selected groups can change, only after you ask (a switch, number or select), once, after a short delay, and the new value is read back. Nothing is written otherwise.",
+        "description": "Writing is off by default. When enabled, only the selected groups can change, only after you ask (the extra hot water switch), once, after a short delay, and the new value is read back. Nothing is written otherwise. Hot water and heating settings are shown read-only until writing them is verified on hardware.",
         "data": {
           "poll_interval": "Poll interval (s)",
           "write_enabled": "Enable writing (off by default)",
@@ -56,9 +56,7 @@
   "selector": {
     "write_groups": {
       "options": {
-        "extra_hot_water": "Extra hot water (start/stop one charge)",
-        "hot_water": "Hot water mode and temperature",
-        "heating": "Heating mode and manual room setpoint"
+        "extra_hot_water": "Extra hot water (start/stop one charge)"
       }
     }
   },
@@ -111,27 +109,23 @@
       },
       "heat_output_energy": {
         "name": "Heat output energy"
-      }
-    },
-    "switch": {
-      "dhw_charge": {
-        "name": "Extra hot water"
-      }
-    },
-    "number": {
+      },
       "dhw_temperature_high": {
         "name": "Hot water target temperature"
       },
       "heating_manual_setpoint": {
         "name": "Manual room setpoint"
-      }
-    },
-    "select": {
+      },
       "dhw_operation_mode": {
         "name": "Hot water mode"
       },
       "heating_operation_mode": {
         "name": "Heating mode"
+      }
+    },
+    "switch": {
+      "dhw_charge": {
+        "name": "Extra hot water"
       }
     }
   },
